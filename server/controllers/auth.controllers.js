@@ -13,7 +13,7 @@ const register = async (req, res) => {
     }
 
     const hashPass = await bcrypt.hash(password, 10);
-    const user = await prisma.create({
+    const user = await prisma.user.create({
       data: {
         email,
         username,
@@ -22,7 +22,7 @@ const register = async (req, res) => {
     });
     res.status(200).json({ message: `user created ${user}` });
   } catch (error) {
-    res.status(500).json({ message: `error` });
+    res.status(500).json({ message: `error ${error.message}` });
   } finally {
     res.status(200).json({ message: `register ran` });
   }
@@ -41,12 +41,12 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "password is wrong" });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_TOKEN, {
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "6hr",
     });
     res.json({ token });
   } catch (error) {
-    res.status(500).json({ message: `error` });
+    res.status(500).json({ message: `error ${error.message}` });
   } finally {
     res.status(200).json({ message: `register ran` });
   }
