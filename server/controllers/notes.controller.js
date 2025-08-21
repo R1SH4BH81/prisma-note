@@ -23,7 +23,7 @@ const getNotes = async (req, res) => {
       where: { userId: req.user.userId },
       orderBy: { createdAt: "desc" },
     });
-    res.status(201).json({ notes });
+    res.status(201).json(notes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
